@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>UShouldKnowMe · 沉默，却无法忽视</title>
+  <title>UShouldKnowMe · 雪翼</title>
   <style>
-    /* ----- 全局重置 & 基础 ----- */
     * {
       margin: 0;
       padding: 0;
@@ -15,656 +14,750 @@
     body {
       background-color: #1a1a1a;
       color: #f4f1ea;
-      font-family: 'Helvetica Neue', 'PingFang SC', 'Segoe UI', sans-serif;
+      font-family: 'Inter', -apple-system, 'Helvetica Neue', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 滚动条 – 极细深灰 */
+    /* 自定义字体粗细层 */
+    .thin { font-weight: 100; }
+    .light { font-weight: 300; }
+    .regular { font-weight: 400; }
+    .medium { font-weight: 500; }
+    .bold { font-weight: 600; }
+
+    /* 滚动条模拟冷静 */
     ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-track { background: #2c2c2c; }
     ::-webkit-scrollbar-thumb { background: #555; border-radius: 2px; }
 
-    /* ----- 色彩 & 分割线 ----- */
-    .divider {
-      width: 100%;
-      height: 0.5px;
-      background: #555;
-      margin: 0 auto;
-      opacity: 0.6;
-    }
-    .divider-wide {
-      width: 90%;
-      max-width: 1400px;
-    }
-
-    /* ----- 导航栏 ----- */
-    .navbar {
+    /* 页头导航 */
+    .header {
       position: fixed;
-      top: 0; left: 0; width: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
       z-index: 100;
+      padding: 1.5rem 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.2rem 4rem;
-      background: transparent;
+      background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(26,26,26,0) 100%);
       transition: background 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+      mix-blend-mode: normal;
+      backdrop-filter: blur(2px);
     }
-    .navbar.scrolled {
-      background: rgba(28, 28, 28, 0.92);
+
+    .header.scrolled {
+      background: rgba(26,26,26,0.92);
       backdrop-filter: blur(6px);
-      box-shadow: 0 1px 0 rgba(255,255,255,0.03);
+      border-bottom: 0.5px solid #3a3a3a;
     }
-    .nav-logo {
-      font-weight: 300;
-      font-size: 1.4rem;
-      letter-spacing: 0.15em;
-      color: #f4f1ea;
-      text-decoration: none;
+
+    .header .logo {
+      height: 28px;
+      opacity: 0.9;
+      transition: opacity 0.3s;
     }
-    .nav-logo span { font-weight: 200; color: #c8b89a; }
+
+    .header .logo img {
+      height: 100%;
+      width: auto;
+      display: block;
+    }
+
     .nav-links {
       display: flex;
-      gap: 3rem;
-      list-style: none;
-      font-weight: 300;
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
+      gap: 2.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: #d5d0c8;
     }
+
     .nav-links a {
-      color: inherit;
+      color: #d5d0c8;
       text-decoration: none;
       transition: color 0.3s;
+      font-weight: 400;
     }
-    .nav-links a:hover { color: #f4f1ea; }
-    .hamburger {
+
+    .nav-links a:hover {
+      color: #f4f1ea;
+    }
+
+    .menu-toggle {
       display: none;
-      flex-direction: column;
-      gap: 5px;
       background: none;
       border: none;
-      cursor: pointer;
-      padding: 0.2rem;
-      z-index: 110;
-    }
-    .hamburger span {
-      display: block;
-      width: 28px;
-      height: 1.5px;
-      background: #f4f1ea;
-      transition: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 5px); }
-    .hamburger.active span:nth-child(2) { opacity: 0; }
-    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
-
-    /* 移动菜单 */
-    .mobile-menu {
-      position: fixed;
-      top: 0; right: -100%;
-      width: 70%;
-      max-width: 320px;
-      height: 100vh;
-      background: rgba(44, 44, 44, 0.95);
-      backdrop-filter: blur(12px);
-      padding: 6rem 2.5rem 2rem;
-      transition: right 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-      z-index: 90;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      border-left: 0.5px solid #555;
-    }
-    .mobile-menu.open { right: 0; }
-    .mobile-menu a {
       color: #f4f1ea;
-      text-decoration: none;
-      font-weight: 300;
-      font-size: 1.3rem;
-      letter-spacing: 0.08em;
-      border-bottom: 0.5px solid #555;
-      padding-bottom: 0.8rem;
+      font-size: 1.5rem;
+      cursor: pointer;
     }
-    .mobile-menu a:hover { color: #c8b89a; }
 
-    /* ----- 首屏 Hero (视差) ----- */
+    /* 移动端导航 */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: #1a1a1a;
+      z-index: 200;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      transition: opacity 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav a {
+      color: #f4f1ea;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      font-weight: 200;
+    }
+
+    .mobile-nav .close-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2.5rem;
+      background: none;
+      border: none;
+      color: #f4f1ea;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    /* 首屏 —— 第一人称雪山滑翔 + 大雪吹来循环 */
     .hero {
       position: relative;
       width: 100%;
       height: 100vh;
       overflow: hidden;
+      background: #1a1a1a;
     }
-    .hero-bg {
+
+    .hero-video-loop {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 120%;
-      background: url('images/model-full.png') no-repeat center 30% / cover;
-      transform: translateY(0);
-      will-change: transform;
-      transition: transform 0.1s cubic-bezier(0.25, 0.1, 0.25, 1);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      filter: grayscale(0.3) contrast(1.1);
     }
-    /* 渐变遮罩 让文字更清晰 */
+
+    /* 由于不能使用视频，用图片序列模拟动态——但用户强调“循环动态”，我们采用高质量全屏背景 + 飘雪粒子（canvas）制造大雪吹来 + 滑翔第一人称感 */
+    .hero-static-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('images/model-full.png');
+      background-size: cover;
+      background-position: center 30%;
+      filter: grayscale(0.5) brightness(0.7);
+    }
+
+    /* 叠加飘雪粒子 */
+    #snow-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
     .hero-overlay {
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(ellipse at 70% 40%, rgba(26,26,26,0.2) 0%, #1a1a1a 85%);
-    }
-    .hero-content {
-      position: relative;
+      bottom: 12%;
+      left: 8%;
       z-index: 10;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-left: 6rem;
-      max-width: 700px;
+      max-width: 600px;
     }
-    .hero-title {
-      font-weight: 200;
-      font-size: clamp(2.8rem, 9vw, 6rem);
+
+    .hero-overlay .pre-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      color: #c8b89a;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
+    }
+
+    .hero-overlay h1 {
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      font-weight: 100;
       letter-spacing: 0.08em;
       line-height: 1.1;
       color: #f4f1ea;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
-    .hero-sub {
-      font-weight: 300;
-      font-size: 1.2rem;
-      letter-spacing: 0.15em;
-      margin-top: 1.5rem;
+
+    .hero-overlay .sub {
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
       color: #d5d0c8;
+      margin-top: 1rem;
+      font-weight: 300;
     }
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      color: #9a9790;
+
+    .hero-overlay .btn-line {
+      display: inline-block;
+      margin-top: 2rem;
+      border: 0.5px solid #c8b89a;
+      padding: 0.7rem 2.8rem;
       font-size: 0.7rem;
       letter-spacing: 0.2em;
-      animation: floatDown 2.2s infinite;
+      color: #f4f1ea;
+      background: transparent;
+      transition: all 0.4s;
+      text-decoration: none;
       cursor: default;
     }
-    .scroll-indicator span { display: block; width: 1px; height: 30px; background: #9a9790; }
-    @keyframes floatDown {
-      0% { opacity: 0.3; transform: translateX(-50%) translateY(0); }
-      50% { opacity: 1; transform: translateX(-50%) translateY(8px); }
-      100% { opacity: 0.3; transform: translateX(-50%) translateY(0); }
-    }
 
-    /* ----- 通用区块 ----- */
-    .section {
-      padding: 6rem 4rem;
-      max-width: 1440px;
-      margin: 0 auto;
-    }
-    .section-title {
-      font-weight: 200;
-      font-size: 2.2rem;
-      letter-spacing: 0.08em;
-      margin-bottom: 2.5rem;
-      color: #f4f1ea;
-    }
-    .section-sub {
-      font-weight: 300;
-      color: #9a9790;
-      letter-spacing: 0.05em;
-      font-size: 0.95rem;
-      margin-bottom: 3rem;
-    }
-
-    /* 品牌格言区 */
-    .mantra {
-      padding: 5rem 2rem;
-      text-align: center;
-      background: #1f1f1f;
-      border-top: 0.5px solid #444;
-      border-bottom: 0.5px solid #444;
-    }
-    .mantra p {
-      font-weight: 200;
-      font-size: clamp(2rem, 6vw, 4rem);
-      letter-spacing: 0.1em;
-      color: #f4f1ea;
-      line-height: 1.3;
-    }
-    .mantra small {
-      display: block;
-      margin-top: 1.2rem;
-      font-weight: 300;
-      letter-spacing: 0.2em;
-      color: #9a9790;
-      font-size: 0.9rem;
-    }
-
-    /* 精选系列网格 */
-    .collection-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2.5rem;
-    }
-    .product-card {
-      position: relative;
-      overflow: hidden;
-      background: #2c2c2c;
-      cursor: pointer;
-      transition: box-shadow 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-    .product-card:hover {
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    }
-    .product-image {
-      width: 100%;
-      height: 460px;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-    .product-card:hover .product-image {
-      transform: scale(1.03);
-    }
-    .product-info {
-      padding: 1.5rem 1.2rem 2rem;
-      background: #2c2c2c;
-    }
-    .product-info h3 {
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      font-size: 1.1rem;
-      color: #f4f1ea;
-    }
-    .product-info p {
-      font-weight: 300;
-      color: #9a9790;
-      font-size: 0.85rem;
-      margin-top: 0.4rem;
-      letter-spacing: 0.03em;
-    }
-    .view-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.4rem 1.2rem;
-      border: 0.5px solid #c8b89a;
-      color: #c8b89a;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      background: transparent;
-      opacity: 0;
-      transition: opacity 0.4s, background 0.3s;
-      text-decoration: none;
-    }
-    .product-card:hover .view-btn {
-      opacity: 1;
-    }
-    .view-btn:hover {
+    .hero-overlay .btn-line:hover {
       background: #c8b89a;
       color: #1a1a1a;
     }
 
-    /* 灵感画廊 — 横向滚动 */
-    .gallery-scroll {
-      display: flex;
-      gap: 1.2rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
+    /* 通用区块 */
+    section {
+      padding: 6rem 3rem;
+      max-width: 1440px;
+      margin: 0 auto;
     }
-    .gallery-scroll::-webkit-scrollbar { height: 3px; }
-    .gallery-scroll::-webkit-scrollbar-thumb { background: #555; }
-    .gallery-item {
-      flex: 0 0 70%;
-      max-width: 600px;
-      scroll-snap-align: start;
-      background: #2c2c2c;
-      overflow: hidden;
-      position: relative;
+
+    .section-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: #c8b89a;
+      margin-bottom: 1rem;
+      font-weight: 400;
     }
-    .gallery-item img {
+
+    .divider {
       width: 100%;
-      height: 500px;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s;
+      height: 0.5px;
+      background: #555;
+      margin: 2rem 0;
     }
-    .gallery-item:hover img {
+
+    /* 品牌介绍区 */
+    .brand-story {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .brand-story .text-block {
+      padding-right: 2rem;
+    }
+
+    .brand-story .text-block h2 {
+      font-size: 2.2rem;
+      font-weight: 100;
+      letter-spacing: 0.05em;
+      line-height: 1.3;
+    }
+
+    .brand-story .text-block p {
+      color: #d5d0c8;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .brand-story .image-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .brand-story .image-block img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: grayscale(0.4);
+      transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .brand-story .image-block img:hover {
       transform: scale(1.02);
     }
 
-    /* 工艺细节区 */
-    .craft-grid {
+    /* 精选系列展示 */
+    .series-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 3rem 4rem;
-      align-items: start;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
     }
-    .craft-item {
-      display: flex;
-      gap: 1.8rem;
-      align-items: flex-start;
-    }
-    .craft-icon {
-      width: 60px;
-      height: 60px;
+
+    .series-item {
+      position: relative;
+      overflow: hidden;
       background: #2c2c2c;
-      border-radius: 50%;
+      aspect-ratio: 3/4;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #c8b89a;
-      font-size: 1.2rem;
-      font-weight: 200;
-      border: 0.5px solid #555;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem;
+      transition: all 0.4s;
+      cursor: default;
     }
-    .craft-text h4 {
-      font-weight: 400;
-      letter-spacing: 0.05em;
+
+    .series-item img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0.5) brightness(0.8);
+      transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .series-item:hover img {
+      transform: scale(1.03);
+    }
+
+    .series-item .label {
+      position: relative;
+      z-index: 3;
       color: #f4f1ea;
-      margin-bottom: 0.3rem;
-    }
-    .craft-text p {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
       font-weight: 300;
+      background: rgba(26,26,26,0.3);
+      backdrop-filter: blur(1px);
+      padding: 0.3rem 0.8rem;
+      width: fit-content;
+    }
+
+    /* 当季灵感画册 */
+    .gallery {
+      display: flex;
+      gap: 2rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 1rem;
+      margin-top: 2rem;
+      scrollbar-width: thin;
+    }
+
+    .gallery-item {
+      flex: 0 0 70%;
+      scroll-snap-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 0.5px solid #3a3a3a;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 70vh;
+      object-fit: cover;
+      filter: grayscale(0.3);
+      transition: transform 0.6s;
+      display: block;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.01);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      color: #f4f1ea;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      background: rgba(26,26,26,0.5);
+      padding: 0.5rem 1.2rem;
+      backdrop-filter: blur(2px);
+    }
+
+    /* 工艺细节区 */
+    .craft {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin: 3rem 0;
+    }
+
+    .craft img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      filter: grayscale(0.5);
+    }
+
+    .craft-desc {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .craft-desc h3 {
+      font-weight: 100;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+    }
+
+    .craft-desc p {
       color: #9a9790;
-      font-size: 0.9rem;
-      line-height: 1.7;
+      margin-top: 1rem;
     }
 
     /* 页脚 */
-    .footer {
-      padding: 3rem 4rem 2rem;
-      border-top: 0.5px solid #444;
+    footer {
+      border-top: 0.5px solid #3a3a3a;
+      padding: 3rem 3rem 2rem;
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      background: #1a1a1a;
-    }
-    .footer-brand {
-      font-weight: 200;
-      letter-spacing: 0.12em;
-      font-size: 1.1rem;
-    }
-    .footer-links {
-      display: flex;
-      gap: 2.5rem;
-      font-weight: 300;
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
+      flex-wrap: wrap;
       color: #9a9790;
-    }
-    .footer-links a {
-      color: #9a9790;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .footer-links a:hover { color: #f4f1ea; }
-    .footer-tagline {
-      width: 100%;
-      text-align: center;
-      margin-top: 2rem;
-      font-weight: 200;
-      color: #555;
-      letter-spacing: 0.15em;
       font-size: 0.7rem;
+      letter-spacing: 0.05em;
     }
 
-    /* 返回顶部 */
-    .back-top {
-      position: fixed;
-      bottom: 2.5rem;
-      right: 2.5rem;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #2c2c2c;
-      border: 0.5px solid #555;
-      color: #f4f1ea;
-      font-size: 1.2rem;
+    footer .footer-links {
       display: flex;
-      align-items: center;
-      justify-content: center;
+      gap: 2rem;
+    }
+
+    .back-to-top {
+      background: none;
+      border: 0.5px solid #555;
+      color: #d5d0c8;
+      padding: 0.4rem 1.2rem;
       cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.5s, transform 0.3s;
-      transform: translateY(10px);
-      pointer-events: none;
-      z-index: 80;
+      transition: 0.3s;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
     }
-    .back-top.visible {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-    .back-top:hover {
-      background: #3a3a3a;
+
+    .back-to-top:hover {
+      background: #c8b89a;
+      color: #1a1a1a;
       border-color: #c8b89a;
     }
 
     /* 响应式 */
-    @media (max-width: 1024px) {
-      .navbar { padding: 1rem 2rem; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .hero-content { padding-left: 3rem; }
-      .section { padding: 4rem 2rem; }
-      .collection-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-      .gallery-item { flex: 0 0 85%; }
+    @media (max-width: 900px) {
+      .header {
+        padding: 1rem 1.5rem;
+      }
+      .nav-links {
+        display: none;
+      }
+      .menu-toggle {
+        display: block;
+      }
+      section {
+        padding: 4rem 1.5rem;
+      }
+      .brand-story {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .series-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .craft {
+        grid-template-columns: 1fr;
+      }
+      .hero-overlay {
+        left: 5%;
+        bottom: 10%;
+      }
     }
-    @media (max-width: 680px) {
-      .navbar { padding: 0.8rem 1.5rem; }
-      .hero-content { padding-left: 1.5rem; }
-      .hero-title { font-size: 2.4rem; }
-      .hero-sub { font-size: 0.9rem; }
-      .section { padding: 3rem 1.2rem; }
-      .collection-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-      .craft-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .footer { flex-direction: column; gap: 1rem; align-items: flex-start; }
-      .footer-links { flex-wrap: wrap; gap: 1.5rem; }
-      .gallery-item { flex: 0 0 95%; }
+
+    @media (max-width: 600px) {
+      .series-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
-
-  <!-- 导航 -->
-  <nav class="navbar" id="navbar">
-    <a href="#" class="nav-logo">UShould<span>Know</span>Me</a>
-    <ul class="nav-links">
-      <li><a href="#">系列</a></li>
-      <li><a href="#">灵感</a></li>
-      <li><a href="#">工艺</a></li>
-      <li><a href="#">故事</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="菜单">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
-  <!-- 移动菜单 -->
-  <div class="mobile-menu" id="mobileMenu">
+  <!-- 移动导航 -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="close-btn" id="closeNav">✕</button>
     <a href="#">系列</a>
-    <a href="#">灵感</a>
+    <a href="#">画册</a>
     <a href="#">工艺</a>
     <a href="#">故事</a>
   </div>
 
-  <!-- 首屏 -->
-  <section class="hero">
-    <div class="hero-bg" id="heroBg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1 class="hero-title">沉默<br>却无法忽视</h1>
-      <p class="hero-sub">不是让你知道我，而是让世界认识你</p>
+  <!-- 页头 -->
+  <header class="header" id="header">
+    <div class="logo">
+      <img src="images/logo.png" alt="UShouldKnowMe">
     </div>
-    <div class="scroll-indicator">
-      <span></span>
-      <span>SCROLL</span>
+    <nav class="nav-links">
+      <a href="#">系列</a>
+      <a href="#">画册</a>
+      <a href="#">工艺</a>
+      <a href="#">故事</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </header>
+
+  <!-- 首屏：第一人称雪山 + 大雪吹来 -->
+  <section class="hero">
+    <div class="hero-static-bg"></div>
+    <canvas id="snow-canvas"></canvas>
+    <div class="hero-overlay">
+      <div class="pre-title">⛰️ 第一人称 · 雪翼</div>
+      <h1>让世界<br>认识你</h1>
+      <div class="sub">UShouldKnowMe · 24/25 深冬系列</div>
+      <span class="btn-line">探索雪境</span>
     </div>
   </section>
 
-  <!-- 品牌格言 -->
-  <div class="mantra">
-    <p>「 沉默，却无法忽视 」</p>
-    <small>UShouldKnowMe · 锋利 冷峻 魅力</small>
-  </div>
+  <!-- 品牌介绍区 -->
+  <section>
+    <div class="section-title">✦ 本质</div>
+    <div class="brand-story">
+      <div class="text-block">
+        <h2>不是让你知道我<br>而是让世界认识你</h2>
+        <p>锋利、冷峻、极具魅力。每一根线条都经过雪山的淬炼。我们用炭黑与燕麦灰构建沉默的张力，在极寒中保留体温。</p>
+        <div class="divider" style="margin: 2rem 0;"></div>
+        <p style="color:#9a9790;">— 静态中蕴藏速度，沉默里自有回声。</p>
+      </div>
+      <div class="image-block">
+        <img src="images/poster-story.png" alt="story">
+        <img src="images/poster-model.png" alt="model">
+      </div>
+    </div>
+  </section>
 
   <!-- 精选系列展示 -->
-  <section class="section">
-    <h2 class="section-title">精选系列</h2>
-    <p class="section-sub">轮廓与质感，定义无声的权威</p>
-    <div class="collection-grid">
-      <div class="product-card">
-        <img class="product-image" src="images/black-tee.png" alt="Black Tee">
-        <div class="product-info">
-          <h3>暗夜丝光</h3>
-          <p>Black Tee · 极致哑黑</p>
-          <span class="view-btn">查看</span>
-        </div>
+  <section>
+    <div class="section-title">◈ 精选系列</div>
+    <div class="series-grid">
+      <div class="series-item">
+        <img src="images/black-tee.png" alt="black-tee">
+        <span class="label">黑色极地 · 01</span>
       </div>
-      <div class="product-card">
-        <img class="product-image" src="images/charcoal-tee.png" alt="Charcoal Tee">
-        <div class="product-info">
-          <h3>炭灰肌理</h3>
-          <p>Charcoal Tee · 矿物触感</p>
-          <span class="view-btn">查看</span>
-        </div>
+      <div class="series-item">
+        <img src="images/charcoal-tee.png" alt="charcoal-tee">
+        <span class="label">炭灰岩 · 02</span>
       </div>
-      <div class="product-card">
-        <img class="product-image" src="images/oatmeal-tee.png" alt="Oatmeal Tee">
-        <div class="product-info">
-          <h3>燕麦暖沙</h3>
-          <p>Oatmeal Tee · 大地呼吸</p>
-          <span class="view-btn">查看</span>
-        </div>
+      <div class="series-item">
+        <img src="images/oatmeal-tee.png" alt="oatmeal-tee">
+        <span class="label">燕麦暖绒 · 03</span>
+      </div>
+      <div class="series-item">
+        <img src="images/white-tee.png" alt="white-tee">
+        <span class="label">白垩纪 · 04</span>
       </div>
     </div>
   </section>
 
-  <!-- 灵感画册 (横向滚动) -->
-  <section class="section" style="padding-top: 1rem;">
-    <h2 class="section-title">当季灵感画册</h2>
-    <p class="section-sub">静止的影像，流动的叙事</p>
-    <div class="gallery-scroll">
-      <div class="gallery-item"><img src="images/poster-collection.png" alt="collection poster"></div>
-      <div class="gallery-item"><img src="images/poster-model.png" alt="model poster"></div>
-      <div class="gallery-item"><img src="images/poster-story.png" alt="story poster"></div>
-      <div class="gallery-item"><img src="images/white-tee.png" alt="white tee"></div>
-      <div class="gallery-item"><img src="images/logo.png" alt="logo detail" style="object-fit:contain; background:#2c2c2c; padding: 2rem;"></div>
+  <!-- 当季灵感画册 -->
+  <section>
+    <div class="section-title">▤ 当季灵感画册</div>
+    <div class="gallery" id="gallery">
+      <div class="gallery-item">
+        <img src="images/poster-collection.png" alt="collection">
+        <div class="gallery-caption">雪线 · 静止</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/poster-model.png" alt="model">
+        <div class="gallery-caption">风痕 · 流动</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/model-full.png" alt="full model">
+        <div class="gallery-caption">第一人称 · 视野</div>
+      </div>
     </div>
   </section>
 
   <!-- 工艺细节区 -->
-  <section class="section">
-    <h2 class="section-title">工艺 · 细节</h2>
-    <p class="section-sub">每一道缝线都是态度</p>
-    <div class="craft-grid">
-      <div class="craft-item">
-        <div class="craft-icon">—</div>
-        <div class="craft-text">
-          <h4>双针肩线</h4>
-          <p>加固结构，塑造挺拔廓形，经得起时间审视。</p>
-        </div>
-      </div>
-      <div class="craft-item">
-        <div class="craft-icon">∣</div>
-        <div class="craft-text">
-          <h4>日本棉纱</h4>
-          <p>140支双丝光棉，手感如脂，哑光而温润。</p>
-        </div>
-      </div>
-      <div class="craft-item">
-        <div class="craft-icon">⌇</div>
-        <div class="craft-text">
-          <h4>隐形式缝头</h4>
-          <p>下摆与袖口无缝头设计，贴肤无感，极简至美。</p>
-        </div>
-      </div>
-      <div class="craft-item">
-        <div class="craft-icon">◈</div>
-        <div class="craft-text">
-          <h4>哑光贝壳扣</h4>
-          <p>天然贝母，磨砂质感，细节处的微光。</p>
-        </div>
+  <section>
+    <div class="section-title">◇ 工艺细节</div>
+    <div class="craft">
+      <img src="images/charcoal-tee.png" alt="工艺特写">
+      <div class="craft-desc">
+        <h3>炭黑 · 双面织</h3>
+        <p>每英寸 380 针，日本古董织机。哑光香槟金线限量点缀。<br>耐受零下20度，保持垂坠与呼吸感。</p>
+        <div class="divider" style="width: 40px; margin: 1.5rem 0;"></div>
+        <p style="color:#d5d0c8;">“不是温暖，是铠甲。” </p>
       </div>
     </div>
   </section>
 
   <!-- 页脚 -->
-  <footer class="footer">
-    <div class="footer-brand">UShouldKnowMe</div>
+  <footer>
+    <div>© UShouldKnowMe · 雪翼系列</div>
     <div class="footer-links">
-      <a href="#">Instagram</a>
-      <a href="#">WeChat</a>
-      <a href="#">Email</a>
+      <span>隐私</span>
+      <span>联系</span>
+      <span>店铺</span>
     </div>
-    <div class="footer-tagline">不是让你知道我，而是让世界认识你</div>
+    <button class="back-to-top" id="backToTop">↑ 返回</button>
   </footer>
-
-  <!-- 返回顶部 -->
-  <button class="back-top" id="backTop" aria-label="返回顶部">↑</button>
 
   <script>
     (function() {
-      'use strict';
-
-      // 导航栏滚动透明变炭黑
-      const navbar = document.getElementById('navbar');
-      const heroBg = document.getElementById('heroBg');
-      const backBtn = document.getElementById('backTop');
-
-      // 首屏视差 + 导航栏背景
-      function onScroll() {
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-        // 导航栏
-        if (scrollY > 60) {
-          navbar.classList.add('scrolled');
+      // 导航滚动渐变
+      const header = document.getElementById('header');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 60) {
+          header.classList.add('scrolled');
         } else {
-          navbar.classList.remove('scrolled');
+          header.classList.remove('scrolled');
         }
-        // 首屏视差 (小幅)
-        if (heroBg) {
-          const offset = scrollY * 0.18;
-          heroBg.style.transform = `translateY(${offset}px)`;
-        }
-        // 返回顶部按钮
-        if (scrollY > window.innerHeight * 0.7) {
-          backBtn.classList.add('visible');
-        } else {
-          backBtn.classList.remove('visible');
-        }
-      }
-
-      window.addEventListener('scroll', onScroll, { passive: true });
-
-      // 汉堡菜单
-      const hamburger = document.getElementById('hamburger');
-      const mobileMenu = document.getElementById('mobileMenu');
-      hamburger.addEventListener('click', function() {
-        this.classList.toggle('active');
-        mobileMenu.classList.toggle('open');
       });
-      // 点击菜单链接关闭
-      mobileMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          hamburger.classList.remove('active');
-          mobileMenu.classList.remove('open');
+
+      // 移动端菜单
+      const menuToggle = document.getElementById('menuToggle');
+      const mobileNav = document.getElementById('mobileNav');
+      const closeNav = document.getElementById('closeNav');
+      menuToggle.addEventListener('click', function() {
+        mobileNav.classList.add('open');
+      });
+      closeNav.addEventListener('click', function() {
+        mobileNav.classList.remove('open');
+      });
+      // 点击链接关闭
+      mobileNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function() {
+          mobileNav.classList.remove('open');
         });
       });
 
       // 返回顶部
+      const backBtn = document.getElementById('backToTop');
       backBtn.addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      // 产品卡片 hover 显示按钮 (已有css, 额外确保)
-      // 画廊自动滚动 (可选) 这里保留手动滚动
+      // 标题视差（首屏轻微）
+      window.addEventListener('scroll', function() {
+        const heroOverlay = document.querySelector('.hero-overlay');
+        if (heroOverlay) {
+          let offset = window.scrollY * 0.2;
+          if (offset < 100) {
+            heroOverlay.style.transform = `translateY(${offset * 0.15}px)`;
+          }
+        }
+      });
 
-      // 图片加载失败降级 (不处理, 使用真实图片)
-      console.log('UShouldKnowMe 官网已加载');
+      // 画廊切换自动滚动效果（轻量）
+      const gallery = document.getElementById('gallery');
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      gallery.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - gallery.offsetLeft;
+        scrollLeft = gallery.scrollLeft;
+        gallery.style.cursor = 'grabbing';
+      });
+      gallery.addEventListener('mouseleave', () => {
+        isDown = false;
+        gallery.style.cursor = 'grab';
+      });
+      gallery.addEventListener('mouseup', () => {
+        isDown = false;
+        gallery.style.cursor = 'grab';
+      });
+      gallery.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - gallery.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        gallery.scrollLeft = scrollLeft - walk;
+      });
+
+      // ---------- 大雪吹来粒子系统 (第一人称动态) ----------
+      const canvas = document.getElementById('snow-canvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+
+      function resizeCanvas() {
+        const hero = document.querySelector('.hero');
+        if (!hero) return;
+        width = hero.offsetWidth;
+        height = hero.offsetHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+
+      function createSnow(num) {
+        particles = [];
+        for (let i = 0; i < num; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: Math.random() * 3 + 1.5,
+            speed: Math.random() * 1.2 + 0.8,
+            wind: Math.random() * 0.8 + 0.3,
+            opacity: Math.random() * 0.5 + 0.3
+          });
+        }
+      }
+
+      function drawSnow() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#f4f1ea';
+        for (let p of particles) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(245, 242, 234, ${p.opacity})`;
+          ctx.fill();
+          // 移动：模拟大雪吹来 (向右下 + 风)
+          p.x += p.wind * 0.8;
+          p.y += p.speed * 0.5;
+          // 循环
+          if (p.y > height + 10) {
+            p.y = -10;
+            p.x = Math.random() * width;
+          }
+          if (p.x > width + 10) {
+            p.x = -10;
+            p.y = Math.random() * height;
+          }
+        }
+        requestAnimationFrame(drawSnow);
+      }
+
+      function initSnow() {
+        resizeCanvas();
+        createSnow(180);
+        drawSnow();
+      }
+
+      window.addEventListener('resize', function() {
+        resizeCanvas();
+        createSnow(180);
+      });
+
+      initSnow();
     })();
   </script>
 </body>
