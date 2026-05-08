@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>独立设计师 · 极简画廊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f7f7f5;
+            color: #1e1e1e;
+            font-family: 'Georgia', 'Times New Roman', '宋体', 'Songti SC', serif;
+            line-height: 1.5;
+            padding: 2.4rem 2.4rem 3.2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 整体容器 */
+        .site {
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        /* 导航栏 —— 干净、留白、衬线 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-bottom: 2.2rem;
+            border-bottom: 1px solid #d0d0ce;
+            margin-bottom: 2.8rem;
+            flex-wrap: wrap;
+            gap: 0.8rem 1.2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            color: #1a1a1a;
+            text-decoration: none;
+            border-bottom: none;
+        }
+        .logo small {
+            font-size: 0.9rem;
+            font-weight: 300;
+            margin-left: 0.6rem;
+            color: #5c5c5a;
+            letter-spacing: 0.4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2c2c2a;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+            padding: 0.2rem 0;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease, opacity 0.2s ease;
+            font-weight: 400;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #1e1e1e;
+            opacity: 0.75;
+        }
+
+        /* 画廊网格 — 大图排版 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            background: #ededea;
+            overflow: hidden;
+            aspect-ratio: 4 / 3;
+            display: flex;
+            align-items: flex-end;
+            transition: box-shadow 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border: 1px solid #e2e2df;
+        }
+
+        /* 模拟大图背景——用SVG几何图形构建极简黑白灰装饰 */
+        .gallery-item .artwork {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eae8e4;
+        }
+
+        .gallery-item .artwork svg {
+            width: 70%;
+            height: 70%;
+            opacity: 0.7;
+            mix-blend-mode: multiply;
+        }
+
+        /* 图片说明 + 标签 */
+        .item-label {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.04), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 0.3rem 1rem;
+            pointer-events: none;
+        }
+
+        .item-label .title {
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: #1c1c1a;
+            text-shadow: 0 1px 2px rgba(255,255,250,0.3);
+        }
+
+        .item-label .category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #4a4a47;
+            background: rgba(245, 245, 240, 0.5);
+            padding: 0.25rem 0.9rem;
+            backdrop-filter: blur(1px);
+            border-radius: 20px;
+            border: 1px solid #cbcbc6;
+            font-weight: 400;
+        }
+
+        /* 联系区域 — 极简衬线 */
+        .contact-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #d0d0ce;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1.2rem 2rem;
+            font-size: 0.95rem;
+            color: #2f2f2d;
+        }
+
+        .contact-line {
+            display: flex;
+            gap: 1.2rem 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-line span {
+            letter-spacing: 0.3px;
+        }
+
+        .contact-line a {
+            color: #1e1e1e;
+            text-decoration: none;
+            border-bottom: 1px solid #b5b5b0;
+            transition: border-color 0.2s;
+        }
+
+        .contact-line a:hover {
+            border-bottom-color: #1e1e1e;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: #6b6b67;
+            letter-spacing: 0.5px;
+        }
+
+        /* 针对小屏：变成一列，更舒展 */
+        @media (max-width: 680px) {
+            body {
+                padding: 1.4rem 1.2rem 2rem;
+            }
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 1.6rem;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+            .logo {
+                font-size: 1.6rem;
+            }
+            .item-label .title {
+                font-size: 1.1rem;
+            }
+            .contact-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* 更宽的屏幕保留大图气质，网格比例微调 */
+        @media (min-width: 1200px) {
+            .gallery {
+                gap: 2.4rem;
+            }
+            .gallery-item {
+                aspect-ratio: 7 / 5;
+            }
+        }
+
+        /* 装饰性微细节 */
+        hr {
+            display: none;
+        }
+
+        /* 让每个图片内的几何图形有差异 */
+        .gallery-item:nth-child(1) .artwork { background: #e2e0db; }
+        .gallery-item:nth-child(2) .artwork { background: #d9d7d1; }
+        .gallery-item:nth-child(3) .artwork { background: #eae7e1; }
+        .gallery-item:nth-child(4) .artwork { background: #dddcd6; }
+    </style>
+</head>
+<body>
+<div class="site">
+    <!-- 导航 -->
+    <nav>
+        <a href="#" class="logo">NORD<small>· 独立设计</small></a>
+        <div class="nav-links">
+            <a href="#">作品</a>
+            <a href="#">关于</a>
+            <a href="#">室内</a>
+            <a href="#">VI</a>
+            <a href="#">档案</a>
+        </div>
+    </nav>
+
+    <!-- 画廊式大图排版 4件作品 -->
+    <div class="gallery">
+        <!-- 1 室内改造 -->
+        <div class="gallery-item">
+            <div class="artwork">
+                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="10" width="104" height="70" fill="none" stroke="#2b2b28" stroke-width="0.8" />
+                    <rect x="18" y="20" width="20" height="20" fill="#3d3d39" opacity="0.5" />
+                    <circle cx="78" cy="34" r="14" fill="#5b5b56" opacity="0.2" />
+                    <line x1="8" y1="72" x2="112" y2="72" stroke="#1f1f1c" stroke-width="1.2" />
+                    <path d="M34,72 L44,52 L60,62 L76,40 L92,72" fill="none" stroke="#3b3b37" stroke-width="0.6" opacity="0.6" />
+                    <rect x="86" y="48" width="18" height="14" fill="#232320" opacity="0.1" />
+                </svg>
+            </div>
+            <div class="item-label">
+                <span class="title">叠院 · 光线改造</span>
+                <span class="category">室内</span>
+            </div>
+        </div>
+
+        <!-- 2 品牌VI -->
+        <div class="gallery-item">
+            <div class="artwork">
+                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="38" r="22" fill="none" stroke="#252522" stroke-width="0.9" />
+                    <circle cx="80" cy="38" r="22" fill="none" stroke="#252522" stroke-width="0.9" />
+                    <circle cx="60" cy="62" r="22" fill="none" stroke="#252522" stroke-width="0.9" />
+                    <line x1="30" y1="20" x2="90" y2="20" stroke="#1a1a18" stroke-width="0.6" opacity="0.3" />
+                    <polygon points="60,32 68,52 52,52" fill="#3e3e3a" opacity="0.2" />
+                    <rect x="98" y="14" width="12" height="12" fill="#4a4a45" opacity="0.2" />
+                </svg>
+            </div>
+            <div class="item-label">
+                <span class="title">几何 · 视觉系统</span>
+                <span class="category">品牌VI</span>
+            </div>
+        </div>
+
+        <!-- 3 室内改造 另一项目 -->
+        <div class="gallery-item">
+            <div class="artwork">
+                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="12" y="14" width="96" height="62" fill="none" stroke="#2b2b28" stroke-width="1" />
+                    <rect x="20" y="24" width="28" height="34" fill="#3d3d38" opacity="0.2" />
+                    <rect x="72" y="24" width="28" height="34" fill="#3d3d38" opacity="0.2" />
+                    <circle cx="60" cy="48" r="8" fill="#1f1f1c" opacity="0.1" />
+                    <path d="M12,76 L60,46 L108,76" fill="none" stroke="#2f2f2b" stroke-width="0.7" opacity="0.5" />
+                    <line x1="40" y1="14" x2="40" y2="76" stroke="#44443f" stroke-width="0.4" stroke-dasharray="2 2" opacity="0.3" />
+                </svg>
+            </div>
+            <div class="item-label">
+                <span class="title">暗调公寓 · 材质</span>
+                <span class="category">室内</span>
+            </div>
+        </div>
+
+        <!-- 4 品牌VI 另一案例 -->
+        <div class="gallery-item">
+            <div class="artwork">
+                <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="10" width="100" height="70" fill="none" stroke="#1f1f1c" stroke-width="0.7" />
+                    <path d="M30,30 L50,16 L70,30 L60,54 L40,54 Z" fill="#3a3a36" opacity="0.2" />
+                    <circle cx="80" cy="56" r="14" fill="none" stroke="#3a3a36" stroke-width="0.6" />
+                    <rect x="18" y="58" width="14" height="14" fill="#2b2b27" opacity="0.15" />
+                    <line x1="10" y1="46" x2="110" y2="46" stroke="#474742" stroke-width="0.5" opacity="0.3" />
+                    <path d="M60,70 L70,60 L90,70" fill="none" stroke="#33332f" stroke-width="0.8" opacity="0.4" />
+                </svg>
+            </div>
+            <div class="item-label">
+                <span class="title">衬线 · 识别手册</span>
+                <span class="category">品牌VI</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 联系方式区域 —— 极简，衬线高级感 -->
+    <div class="contact-section">
+        <div class="contact-line">
+            <span>工作室 · 上海 / 北京</span>
+            <span><a href="mailto:studio@nord.design">studio@nord.design</a></span>
+            <span><a href="tel:+8613800112233">+86 138 0011 2233</a></span>
+        </div>
+        <div class="copyright">
+            © 2025 NORD 独立设计
+        </div>
+    </div>
+
+    <!-- 隐蔽的装饰线——极简气质 -->
+</div>
+
+<!-- 没有任何外部JS，只有空脚本占位 (保持干净) -->
+<script>
+    // 静默占位 —— 仅保证结构完整性，无多余交互
+    (function() {
+        // 可忽略：控制台留白
+        console.log('画廊主页 · 极简衬线');
+    })();
+</script>
+</body>
+</html>
