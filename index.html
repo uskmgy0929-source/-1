@@ -21,19 +21,16 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* 自定义字体粗细层 */
     .thin { font-weight: 100; }
     .light { font-weight: 300; }
     .regular { font-weight: 400; }
     .medium { font-weight: 500; }
     .bold { font-weight: 600; }
 
-    /* 滚动条模拟冷静 */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: #2c2c2c; }
     ::-webkit-scrollbar-thumb { background: #555; border-radius: 2px; }
 
-    /* 页头导航 */
     .header {
       position: fixed;
       top: 0;
@@ -46,7 +43,6 @@
       align-items: center;
       background: linear-gradient(180deg, rgba(26,26,26,0.9) 0%, rgba(26,26,26,0) 100%);
       transition: background 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-      mix-blend-mode: normal;
       backdrop-filter: blur(2px);
     }
 
@@ -65,7 +61,6 @@
     .header .logo img {
       height: 100%;
       width: auto;
-      display: block;
     }
 
     .nav-links {
@@ -97,7 +92,6 @@
       cursor: pointer;
     }
 
-    /* 移动端导航 */
     .mobile-nav {
       display: none;
       position: fixed;
@@ -137,27 +131,26 @@
       cursor: pointer;
     }
 
-    /* 首屏 —— 第一人称雪山滑翔 + 大雪吹来循环 */
+    /* 首屏 */
     .hero {
       position: relative;
       width: 100%;
       height: 100vh;
       overflow: hidden;
-      background: #1a1a1a;
+      background: #0a0a0c;
     }
 
-    .hero-video-loop {
+    /* 动态 Canvas 背景 */
+    #skiCanvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      opacity: 0.85;
-      filter: grayscale(0.3) contrast(1.1);
+      z-index: 1;
     }
 
-    /* 由于不能使用视频，用图片序列模拟动态——但用户强调“循环动态”，我们采用高质量全屏背景 + 飘雪粒子（canvas）制造大雪吹来 + 滑翔第一人称感 */
+    /* 原有静态图片作为叠加（降低透明度，避免干扰动态） */
     .hero-static-bg {
       position: absolute;
       top: 0;
@@ -167,18 +160,8 @@
       background-image: url('images/model-full.png');
       background-size: cover;
       background-position: center 30%;
-      filter: grayscale(0.5) brightness(0.7);
-    }
-
-    /* 叠加飘雪粒子 */
-    #snow-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
+      filter: grayscale(0.8) brightness(0.35);  /* 压暗，凸显前景 */
+      z-index: 0;
     }
 
     .hero-overlay {
@@ -225,7 +208,8 @@
       background: transparent;
       transition: all 0.4s;
       text-decoration: none;
-      cursor: default;
+      cursor: pointer;
+      user-select: none;
     }
 
     .hero-overlay .btn-line:hover {
@@ -255,7 +239,6 @@
       margin: 2rem 0;
     }
 
-    /* 品牌介绍区 */
     .brand-story {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -289,7 +272,6 @@
     .brand-story .image-block img {
       width: 100%;
       height: auto;
-      display: block;
       filter: grayscale(0.4);
       transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
@@ -298,7 +280,6 @@
       transform: scale(1.02);
     }
 
-    /* 精选系列展示 */
     .series-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -316,7 +297,6 @@
       justify-content: flex-end;
       padding: 1rem;
       transition: all 0.4s;
-      cursor: default;
     }
 
     .series-item img {
@@ -347,7 +327,6 @@
       width: fit-content;
     }
 
-    /* 当季灵感画册 */
     .gallery {
       display: flex;
       gap: 2rem;
@@ -391,7 +370,6 @@
       backdrop-filter: blur(2px);
     }
 
-    /* 工艺细节区 */
     .craft {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -423,7 +401,6 @@
       margin-top: 1rem;
     }
 
-    /* 页脚 */
     footer {
       border-top: 0.5px solid #3a3a3a;
       padding: 3rem 3rem 2rem;
@@ -458,7 +435,6 @@
       border-color: #c8b89a;
     }
 
-    /* 响应式 */
     @media (max-width: 900px) {
       .header {
         padding: 1rem 1.5rem;
@@ -524,10 +500,10 @@
     <button class="menu-toggle" id="menuToggle">☰</button>
   </header>
 
-  <!-- 首屏：第一人称雪山 + 大雪吹来 -->
+  <!-- 首屏：第一人称雪山 + 大雪扑面 -->
   <section class="hero">
     <div class="hero-static-bg"></div>
-    <canvas id="snow-canvas"></canvas>
+    <canvas id="skiCanvas"></canvas>
     <div class="hero-overlay">
       <div class="pre-title">⛰️ 第一人称 · 雪翼</div>
       <h1>让世界<br>认识你</h1>
@@ -536,7 +512,7 @@
     </div>
   </section>
 
-  <!-- 品牌介绍区 -->
+  <!-- 其余区块保留不变 -->
   <section>
     <div class="section-title">✦ 本质</div>
     <div class="brand-story">
@@ -553,7 +529,6 @@
     </div>
   </section>
 
-  <!-- 精选系列展示 -->
   <section>
     <div class="section-title">◈ 精选系列</div>
     <div class="series-grid">
@@ -576,7 +551,6 @@
     </div>
   </section>
 
-  <!-- 当季灵感画册 -->
   <section>
     <div class="section-title">▤ 当季灵感画册</div>
     <div class="gallery" id="gallery">
@@ -595,7 +569,6 @@
     </div>
   </section>
 
-  <!-- 工艺细节区 -->
   <section>
     <div class="section-title">◇ 工艺细节</div>
     <div class="craft">
@@ -609,7 +582,6 @@
     </div>
   </section>
 
-  <!-- 页脚 -->
   <footer>
     <div>© UShouldKnowMe · 雪翼系列</div>
     <div class="footer-links">
@@ -636,128 +608,131 @@
       const menuToggle = document.getElementById('menuToggle');
       const mobileNav = document.getElementById('mobileNav');
       const closeNav = document.getElementById('closeNav');
-      menuToggle.addEventListener('click', function() {
-        mobileNav.classList.add('open');
-      });
-      closeNav.addEventListener('click', function() {
-        mobileNav.classList.remove('open');
-      });
-      // 点击链接关闭
+      menuToggle.addEventListener('click', () => mobileNav.classList.add('open'));
+      closeNav.addEventListener('click', () => mobileNav.classList.remove('open'));
       mobileNav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function() {
-          mobileNav.classList.remove('open');
-        });
+        link.addEventListener('click', () => mobileNav.classList.remove('open'));
       });
 
       // 返回顶部
-      const backBtn = document.getElementById('backToTop');
-      backBtn.addEventListener('click', function() {
+      document.getElementById('backToTop').addEventListener('click', function() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      // 标题视差（首屏轻微）
+      // 首屏标题视差
       window.addEventListener('scroll', function() {
         const heroOverlay = document.querySelector('.hero-overlay');
-        if (heroOverlay) {
-          let offset = window.scrollY * 0.2;
-          if (offset < 100) {
-            heroOverlay.style.transform = `translateY(${offset * 0.15}px)`;
-          }
+        if (heroOverlay && window.scrollY < 200) {
+          heroOverlay.style.transform = `translateY(${window.scrollY * 0.15}px)`;
         }
       });
 
-      // 画廊切换自动滚动效果（轻量）
+      // 画廊拖拽滚动
       const gallery = document.getElementById('gallery');
-      let isDown = false;
-      let startX;
-      let scrollLeft;
+      let isDown = false, startX, scrollLeft;
       gallery.addEventListener('mousedown', (e) => {
         isDown = true;
         startX = e.pageX - gallery.offsetLeft;
         scrollLeft = gallery.scrollLeft;
         gallery.style.cursor = 'grabbing';
       });
-      gallery.addEventListener('mouseleave', () => {
-        isDown = false;
-        gallery.style.cursor = 'grab';
-      });
-      gallery.addEventListener('mouseup', () => {
-        isDown = false;
-        gallery.style.cursor = 'grab';
-      });
+      gallery.addEventListener('mouseleave', () => { isDown = false; gallery.style.cursor = 'grab'; });
+      gallery.addEventListener('mouseup', () => { isDown = false; gallery.style.cursor = 'grab'; });
       gallery.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - gallery.offsetLeft;
-        const walk = (x - startX) * 1.5;
-        gallery.scrollLeft = scrollLeft - walk;
+        gallery.scrollLeft = scrollLeft - (x - startX) * 1.5;
       });
 
-      // ---------- 大雪吹来粒子系统 (第一人称动态) ----------
-      const canvas = document.getElementById('snow-canvas');
-      const ctx = canvas.getContext('2d');
-      let width, height;
+      // ========== 第一人称滑雪动态引擎 ==========
+      const skiCanvas = document.getElementById('skiCanvas');
+      const ctx = skiCanvas.getContext('2d');
+      let w, h;
       let particles = [];
+      const PARTICLE_COUNT = 350;
 
       function resizeCanvas() {
         const hero = document.querySelector('.hero');
-        if (!hero) return;
-        width = hero.offsetWidth;
-        height = hero.offsetHeight;
-        canvas.width = width;
-        canvas.height = height;
+        w = hero.offsetWidth;
+        h = hero.offsetHeight;
+        skiCanvas.width = w;
+        skiCanvas.height = h;
       }
 
-      function createSnow(num) {
-        particles = [];
-        for (let i = 0; i < num; i++) {
-          particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            r: Math.random() * 3 + 1.5,
-            speed: Math.random() * 1.2 + 0.8,
-            wind: Math.random() * 0.8 + 0.3,
-            opacity: Math.random() * 0.5 + 0.3
-          });
+      class SnowParticle {
+        constructor() {
+          this.reset();
         }
-      }
-
-      function drawSnow() {
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = '#f4f1ea';
-        for (let p of particles) {
+        reset() {
+          // 从视野中心偏下放射（模拟向前冲）
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 3 + Math.random() * 12;
+          this.x = w / 2 + (Math.random() - 0.5) * 150;
+          this.y = h * 0.6 + (Math.random() - 0.5) * 100;
+          this.vx = Math.cos(angle) * speed;
+          this.vy = Math.sin(angle) * speed;
+          this.size = 0.3 + Math.random() * 3.5;
+          this.opacity = 0.15 + Math.random() * 0.5;
+          this.life = 0;
+          this.maxLife = 60 + Math.floor(Math.random() * 100);
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.size += 0.015;  // 越来越近
+          this.life++;
+          if (this.life > this.maxLife ||
+              this.x < -100 || this.x > w + 100 ||
+              this.y < -100 || this.y > h + 100) {
+            this.reset();
+          }
+        }
+        draw(ctx) {
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(245, 242, 234, ${p.opacity})`;
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          const gray = 180 + Math.floor(Math.random() * 75);
+          ctx.fillStyle = `rgba(${gray}, ${gray}, ${gray}, ${this.opacity})`;
           ctx.fill();
-          // 移动：模拟大雪吹来 (向右下 + 风)
-          p.x += p.wind * 0.8;
-          p.y += p.speed * 0.5;
-          // 循环
-          if (p.y > height + 10) {
-            p.y = -10;
-            p.x = Math.random() * width;
-          }
-          if (p.x > width + 10) {
-            p.x = -10;
-            p.y = Math.random() * height;
-          }
         }
-        requestAnimationFrame(drawSnow);
       }
 
-      function initSnow() {
-        resizeCanvas();
-        createSnow(180);
-        drawSnow();
+      function drawBackgroundLines() {
+        const t = Date.now() * 0.004;
+        ctx.strokeStyle = 'rgba(80, 80, 85, 0.2)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 10; i++) {
+          const xBase = (i * 90 + t * 70) % (w + 200) - 100;
+          ctx.beginPath();
+          ctx.moveTo(xBase, h);
+          ctx.lineTo(xBase - 35, h - 120 - Math.sin(i) * 70);
+          ctx.stroke();
+        }
       }
 
-      window.addEventListener('resize', function() {
+      function animate() {
+        ctx.clearRect(0, 0, w, h);
+        drawBackgroundLines();
+        particles.forEach(p => { p.update(); p.draw(ctx); });
+        requestAnimationFrame(animate);
+      }
+
+      function initSkiEffect() {
         resizeCanvas();
-        createSnow(180);
+        particles = [];
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          particles.push(new SnowParticle());
+        }
+        animate();
+      }
+
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        // 重新分布粒子位置，避免集中在旧中心
+        particles.forEach(p => p.reset());
       });
 
-      initSnow();
+      initSkiEffect();
     })();
   </script>
 </body>
